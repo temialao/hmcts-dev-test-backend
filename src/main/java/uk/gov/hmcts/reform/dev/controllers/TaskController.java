@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import uk.gov.hmcts.reform.dev.models.StatusUpdateRequest;
 import uk.gov.hmcts.reform.dev.models.Task;
+import uk.gov.hmcts.reform.dev.models.TaskStatus;
 import uk.gov.hmcts.reform.dev.services.TaskService;
 
 @RestController
@@ -44,12 +45,17 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<Page<Task>> getAllTasks(
+            @RequestParam(required = false) TaskStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "dueDateTime") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
+
+        if (status != null) {
+            return ResponseEntity.ok(taskService.getTasksByStatus(status, pageable));
+        }
         return ResponseEntity.ok(taskService.getAllTasks(pageable));
     }
 

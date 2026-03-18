@@ -34,6 +34,10 @@ public class TaskService {
         return taskRepository.findAll(pageable);
     }
 
+    public Page<Task> getTasksByStatus(TaskStatus status, Pageable pageable) {
+        return taskRepository.findByStatus(status, pageable);
+    }
+
     public Task updateTaskStatus(@NonNull Long id, TaskStatus status) {
         Task task = getTaskById(id);
         task.setStatus(status);

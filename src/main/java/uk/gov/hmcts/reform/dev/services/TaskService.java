@@ -7,7 +7,8 @@ import uk.gov.hmcts.reform.dev.models.TaskStatus;
 import uk.gov.hmcts.reform.dev.exceptions.TaskNotFoundException;
 import uk.gov.hmcts.reform.dev.repositories.TaskRepository;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @SuppressWarnings("null")
@@ -29,8 +30,8 @@ public class TaskService {
             .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public Page<Task> getAllTasks(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     public Task updateTaskStatus(@NonNull Long id, TaskStatus status) {

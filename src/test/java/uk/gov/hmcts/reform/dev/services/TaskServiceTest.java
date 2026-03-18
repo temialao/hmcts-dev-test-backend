@@ -14,6 +14,10 @@ import uk.gov.hmcts.reform.dev.repositories.TaskRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,11 +73,12 @@ class TaskServiceTest {
 
     @Test
     void getAllTasks_shouldReturnAllTasks() {
-        when(taskRepository.findAll()).thenReturn(List.of(task));
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findAll(any(Pageable.class))).thenReturn(page);
 
-        List<Task> results = taskService.getAllTasks();
+        Page<Task> results = taskService.getAllTasks(PageRequest.of(0, 20));
 
-        assertEquals(1, results.size());
+        assertEquals(1, results.getTotalElements());
     }
 
     @Test

@@ -26,8 +26,12 @@ public class Task {
     private Long id;
 
     @NotBlank(message = "Title is required")
+    @Column(length = 255)
+    @jakarta.validation.constraints.Size(max = 255, message = "Title must be 255 characters or less")
     private String title;
 
+    @Column(length = 1000)
+    @jakarta.validation.constraints.Size(max = 1000, message = "Description must be 1000 characters or less")
     private String description;
 
     @NotNull(message = "Status is required")

@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dev.models.Task;
 import uk.gov.hmcts.reform.dev.models.TaskStatus;
+import uk.gov.hmcts.reform.dev.exceptions.TaskNotFoundException;
 import uk.gov.hmcts.reform.dev.repositories.TaskRepository;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class TaskService {
 
     public Task getTaskById(@NonNull Long id) {
         return taskRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+            .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
     public List<Task> getAllTasks() {

@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.dev.controllers;
 
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 import jakarta.validation.Valid;
+import uk.gov.hmcts.reform.dev.models.StatusUpdateRequest;
 import uk.gov.hmcts.reform.dev.models.Task;
-import uk.gov.hmcts.reform.dev.models.TaskStatus;
 import uk.gov.hmcts.reform.dev.services.TaskService;
 
 @RestController
@@ -47,9 +45,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        TaskStatus status = TaskStatus.valueOf(body.get("status"));
-        return ResponseEntity.ok(taskService.updateTaskStatus(id, status));
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody StatusUpdateRequest request) {
+        return ResponseEntity.ok(taskService.updateTaskStatus(id, request.getStatus()));
     }
 
     @DeleteMapping("/{id}")

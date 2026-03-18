@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uk.gov.hmcts.reform.dev.validation.FutureDateTime;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ public class Task {
     private TaskStatus status;
 
     @NotNull(message = "Due date is required")
+    @FutureDateTime
     private LocalDateTime dueDateTime;
 
     @CreatedDate

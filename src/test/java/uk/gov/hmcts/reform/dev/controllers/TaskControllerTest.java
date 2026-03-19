@@ -24,8 +24,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TaskController.class)
 class TaskControllerTest {
@@ -57,7 +61,8 @@ class TaskControllerTest {
     void createTask_shouldReturn201() throws Exception {
         when(taskService.createTask(any(Task.class))).thenReturn(task);
 
-        String json = "{\"title\":\"Test task\",\"description\":\"Test description\",\"status\":\"PENDING\",\"dueDateTime\":\"2027-03-20T10:00:00\"}";
+        String json = "{\"title\":\"Test task\",\"description\":\"Test description\","
+            + "\"status\":\"PENDING\",\"dueDateTime\":\"2027-03-20T10:00:00\"}";
 
         mockMvc.perform(post("/tasks")
                 .contentType(MediaType.APPLICATION_JSON)

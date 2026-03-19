@@ -88,7 +88,7 @@ Swagger UI is available at `http://localhost:4000/swagger-ui.html` when the appl
 open build/reports/jacoco/test/html/index.html
 ```
 
-Current coverage: **81% instructions, 83% branches**
+Current coverage: **82% instructions, 91% branches**
 
 ## Design Decisions
 

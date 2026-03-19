@@ -19,10 +19,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
@@ -99,6 +102,38 @@ class TaskServiceTest {
         when(taskRepository.findByTitleContainingIgnoreCase(eq("Test"), any(Pageable.class))).thenReturn(page);
 
         Page<Task> results = taskService.searchTasks("Test", null, PageRequest.of(0, 20));
+
+        assertEquals(1, results.getTotalElements());
+    }
+
+    @Test
+    void searchTasks_withSearchAndStatus_shouldReturnFilteredResults() {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findByTitleContainingIgnoreCaseAndStatus(
+            eq("Test"), eq(TaskStatus.PENDING), any(Pageable.class)))
+            .thenReturn(page);
+
+        Page<Task> results = taskService.searchTasks("Test", TaskStatus.PENDING, PageRequest.of(0, 20));
+
+        assertEquals(1, results.getTotalElements());
+    }
+
+    @Test
+    void searchTasks_withStatusOnly_shouldReturnFilteredResults() {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findByStatus(eq(TaskStatus.PENDING), any(Pageable.class))).thenReturn(page);
+
+        Page<Task> results = taskService.searchTasks(null, TaskStatus.PENDING, PageRequest.of(0, 20));
+
+        assertEquals(1, results.getTotalElements());
+    }
+
+    @Test
+    void searchTasks_withNoFilters_shouldReturnAllResults() {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findAll(any(Pageable.class))).thenReturn(page);
+
+        Page<Task> results = taskService.searchTasks(null, null, PageRequest.of(0, 20));
 
         assertEquals(1, results.getTotalElements());
     }

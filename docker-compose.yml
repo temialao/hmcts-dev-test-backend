@@ -6,9 +6,9 @@ services:
       POSTGRES_USER: hmcts
       POSTGRES_PASSWORD: hmcts
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata-hmcts:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
+  pgdata-hmcts:

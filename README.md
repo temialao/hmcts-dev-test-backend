@@ -21,7 +21,7 @@ A RESTful API for managing caseworker tasks, built with Spring Boot and PostgreS
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/hmcts-dev-test-backend.git
+   git clone https://github.com/temialao/hmcts-dev-test-backend.git
    cd hmcts-dev-test-backend
    ```
 

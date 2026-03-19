@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,13 +73,24 @@ class TaskServiceTest {
     }
 
     @Test
-    void getAllTasks_shouldReturnAllTasks() {
+    void getAllTasks_shouldReturnPagedResults() {
         Page<Task> page = new PageImpl<>(List.of(task));
         when(taskRepository.findAll(any(Pageable.class))).thenReturn(page);
 
         Page<Task> results = taskService.getAllTasks(PageRequest.of(0, 20));
 
         assertEquals(1, results.getTotalElements());
+    }
+
+    @Test
+    void getTasksByStatus_shouldReturnFilteredResults() {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findByStatus(eq(TaskStatus.PENDING), any(Pageable.class))).thenReturn(page);
+
+        Page<Task> results = taskService.getTasksByStatus(TaskStatus.PENDING, PageRequest.of(0, 20));
+
+        assertEquals(1, results.getTotalElements());
+        assertEquals(TaskStatus.PENDING, results.getContent().get(0).getStatus());
     }
 
     @Test

@@ -18,8 +18,10 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<Map<String, Object>> response = handler.handleTaskNotFound(ex);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Not Found", response.getBody().get("error"));
-        assertEquals("Task not found with id: 1", response.getBody().get("message"));
+        Map<String, Object> body = response.getBody();
+        assertNotNull(body);
+        assertEquals("Not Found", body.get("error"));
+        assertEquals("Task not found with id: 1", body.get("message"));
     }
 
     @Test
@@ -28,7 +30,9 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<Map<String, Object>> response = handler.handleIllegalArgument(ex);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Bad Request", response.getBody().get("error"));
-        assertEquals("Bad value", response.getBody().get("message"));
+        Map<String, Object> body = response.getBody();
+        assertNotNull(body);
+        assertEquals("Bad Request", body.get("error"));
+        assertEquals("Bad value", body.get("message"));
     }
 }

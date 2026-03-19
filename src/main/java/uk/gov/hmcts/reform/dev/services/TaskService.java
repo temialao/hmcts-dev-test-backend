@@ -38,6 +38,19 @@ public class TaskService {
         return taskRepository.findByStatus(status, pageable);
     }
 
+    public Page<Task> searchTasks(String search, TaskStatus status, Pageable pageable) {
+        if (search != null && status != null) {
+            return taskRepository.findByTitleContainingIgnoreCaseAndStatus(search, status, pageable);
+        }
+        if (search != null) {
+            return taskRepository.findByTitleContainingIgnoreCase(search, pageable);
+        }
+        if (status != null) {
+            return taskRepository.findByStatus(status, pageable);
+        }
+        return taskRepository.findAll(pageable);
+    }
+
     public Task updateTaskStatus(@NonNull Long id, TaskStatus status) {
         Task task = getTaskById(id);
         task.setStatus(status);

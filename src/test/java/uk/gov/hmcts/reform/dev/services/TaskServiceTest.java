@@ -94,6 +94,16 @@ class TaskServiceTest {
     }
 
     @Test
+    void searchTasks_shouldReturnFilteredResults() {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskRepository.findByTitleContainingIgnoreCase(eq("Test"), any(Pageable.class))).thenReturn(page);
+
+        Page<Task> results = taskService.searchTasks("Test", null, PageRequest.of(0, 20));
+
+        assertEquals(1, results.getTotalElements());
+    }
+
+    @Test
     void updateTaskStatus_shouldUpdateAndReturnTask() {
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);

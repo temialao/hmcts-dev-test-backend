@@ -50,10 +50,11 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @Operation(summary = "Get all tasks with optional filtering, pagination and sorting")
+    @Operation(summary = "Get all tasks with optional search, filtering, pagination and sorting")
     @ApiResponse(responseCode = "200", description = "Tasks retrieved successfully")
     @GetMapping
     public ResponseEntity<Page<Task>> getAllTasks(
+            @RequestParam(required = false) String search,
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
@@ -61,11 +62,7 @@ public class TaskController {
             @RequestParam(defaultValue = "asc") String direction) {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        if (status != null) {
-            return ResponseEntity.ok(taskService.getTasksByStatus(status, pageable));
-        }
-        return ResponseEntity.ok(taskService.getAllTasks(pageable));
+        return ResponseEntity.ok(taskService.searchTasks(search, status, pageable));
     }
 
     @Operation(summary = "Update the status of a task")

@@ -55,6 +55,7 @@ Swagger UI is available at `http://localhost:4000/swagger-ui.html` when the appl
 
 | Parameter | Default     | Description                          |
 |-----------|-------------|--------------------------------------|
+| search    | -           | Search tasks by title                |
 | status    | -           | Filter by status (PENDING, IN_PROGRESS, COMPLETED) |
 | page      | 0           | Page number                          |
 | size      | 20          | Page size                            |

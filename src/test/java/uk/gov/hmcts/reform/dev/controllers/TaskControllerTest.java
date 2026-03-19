@@ -109,7 +109,7 @@ class TaskControllerTest {
     @Test
     void getAllTasks_shouldReturn200() throws Exception {
         Page<Task> page = new PageImpl<>(List.of(task));
-        when(taskService.getAllTasks(any(Pageable.class))).thenReturn(page);
+        when(taskService.searchTasks(eq(null), eq(null), any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/tasks"))
             .andExpect(status().isOk())
@@ -120,11 +120,21 @@ class TaskControllerTest {
     @Test
     void getAllTasks_withStatusFilter_shouldReturn200() throws Exception {
         Page<Task> page = new PageImpl<>(List.of(task));
-        when(taskService.getTasksByStatus(eq(TaskStatus.PENDING), any(Pageable.class))).thenReturn(page);
+        when(taskService.searchTasks(eq(null), eq(TaskStatus.PENDING), any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/tasks?status=PENDING"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content[0].status").value("PENDING"));
+    }
+
+    @Test
+    void getAllTasks_withSearchFilter_shouldReturn200() throws Exception {
+        Page<Task> page = new PageImpl<>(List.of(task));
+        when(taskService.searchTasks(eq("Test"), eq(null), any(Pageable.class))).thenReturn(page);
+
+        mockMvc.perform(get("/tasks?search=Test"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].title").value("Test task"));
     }
 
     @Test
